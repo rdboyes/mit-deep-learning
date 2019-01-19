@@ -40,7 +40,7 @@ library(rstudioapi)
 library(magick)
   
 png("image.png", width = 2449, height = 1425)  
-google_streetview("K7K4T5",
+google_streetview("K7K3A8",
                   key = map_key,
                   heading = 180,
                   fov = 120, 
@@ -48,10 +48,6 @@ google_streetview("K7K4T5",
 dev.off()
 image <- image_read('image.png')
 image_write(image_crop(image,"2049x1025+200+200"), path = "image2.png")
-
-?image_write
-
-savePlotAsImage("img1.png", format = c("png"), 2049,1025)
   
 #feed all images into trained CNN, return 0 if sidewalk not present and 1 if sidewalk present
 
