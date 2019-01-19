@@ -37,14 +37,19 @@ plot(df)
 # ----------- call google maps api for each location, get image for N/W -----------
 
 library(rstudioapi)
+library(magick)
   
-  
+png("image.png", width = 2449, height = 1425)  
 google_streetview("K7K4T5",
                   key = map_key,
-                  heading = 180, 
+                  heading = 180,
                   fov = 120, 
-                  output = "plot",
-                  size = c(2049,1025))
+                  size = c(2449,1425))
+dev.off()
+image <- image_read('image.png')
+image_write(image_crop(image,"2049x1025+200+200"), path = "image2.png")
+
+?image_write
 
 savePlotAsImage("img1.png", format = c("png"), 2049,1025)
   
