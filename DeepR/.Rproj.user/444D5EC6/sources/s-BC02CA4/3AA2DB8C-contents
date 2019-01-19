@@ -1,0 +1,58 @@
+# install.packages('mapsapi')
+# install.packages('googleway')
+
+library(googleway)
+
+#input: postal code, radius (km), resolution (points per radius distance)
+
+pc <- "K7K3A8"
+resolution <- 20
+radius <- 2
+
+# ----------- find relative position of all points ----------------------- (working)
+
+df <- data.frame(x = 0, y = 0)
+
+for (i in -resolution:resolution){
+  for (j in -(resolution-i):(resolution-i)){
+    if (abs(i) + abs(j) <= resolution){
+      df <- rbind(df, c((i*radius/(resolution)),(j*radius/(resolution))))
+    }
+  }
+}
+
+plot(df)
+
+# ----------- get lat/long of all points to be sampled -------------------
+
+  length_of_degree_lat <- 110.5
+  
+  #geocode postal code for lat/long (PCCF) file
+  
+  length_of_degree_long <- cos(pc_lat)*111.3
+  
+  df$long <- df$x/length_of_degree_long
+  df$lat <- df$y/length_of_degree_lat
+  
+# ----------- call google maps api for each location, get image for N/W -----------
+
+library(rstudioapi)
+  
+  
+google_streetview("K7K4T5",
+                  key = map_key,
+                  heading = 180, 
+                  fov = 120, 
+                  output = "plot",
+                  size = c(2049,1025))
+
+savePlotAsImage("img1.png", format = c("png"), 2049,1025)
+  
+#feed all images into trained CNN, return 0 if sidewalk not present and 1 if sidewalk present
+
+library(tensorflow)
+
+?tensorflow
+
+
+#output: percentage of hits which contain sidewalk
